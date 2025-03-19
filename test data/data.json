@@ -1,0 +1,27 @@
+{
+"url": {
+
+    "autoExcerUrl": "https://automationexercise.com/",
+    "loginSignupUrl": "https://automationexercise.com/login",
+    "signupUrl": "https://automationexercise.com/signup",
+    "accountCreatedUrl": " https://automationexercise.com/account_created",
+    "productsUrl": "https://automationexercise.com/products"
+},
+"dialog": {
+    "message": "Consent"
+},
+
+"validLogin": {
+    "login1": "UserABC",
+    "email1": "emailABC@mail.com",
+    "pass1": "pass12345"
+},
+"products": {
+    "product1": "Little Girls Mr. Panda Shirt",
+    "product2": "Rust Red Linen Saree"
+}
+
+
+
+
+}
