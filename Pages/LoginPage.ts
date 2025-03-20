@@ -1,6 +1,5 @@
 import { Locator, Page } from '@playwright/test';
 import data from '../test data/data.json';
-import { af_ZA } from '@faker-js/faker';
 
 export class LoginPage {
   private page: Page;

@@ -1,68 +1,71 @@
 import { expect, Locator, Page } from '@playwright/test';
 import data from '../test data/data.json';
-import { af_ZA } from '@faker-js/faker';
 
 export class ProductsPage {
   private page: Page;
-
-
-  public emailSignupTextbox: Locator;
-  public signupButton: Locator;
-  public emailLoginTextbox: Locator;
-  public passwordLoginTextbox: Locator;
-  public loginButton: Locator;
-  public productA: Locator;
   public continueShoppingButton: Locator;
-  public productB: Locator;
-  public viewCardButton: Locator;
-
-
+  public placeOrder: Locator;
+  public productCart: Locator;
+  public addToCartButton: Locator;
+  public productCart2: Locator;
+  public addToCartButton2: Locator;
+  //filters locators
+  public categoryWomen: Locator;
+  public dressCategory: Locator;
+  public categoryProductsTable: Locator;
+  public kookieKidsCategory: Locator;
+  public kookieKidsProductsTable: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.continueShoppingButton = this.page.getByRole('button', { name: 'Continue Shopping' });
-    this.productA = this.page.getByRole('heading', { name: data.products.product1 }).first();
-    this.productB = this.page.locator('div.productinfo h2', { hasText: data.products.product2 });
-    this.viewCardButton = this.page.getByRole('link', { name: 'View Cart' });
-  
+    this.placeOrder = page.locator('a.btn.btn-default.check_out[href="/payment"]'); 
+    this.productCart = this.page.locator('div.productinfo.text-center p:has-text("Little Girls Mr. Panda Shirt")');
+    this.addToCartButton = this.page.locator('div:nth-child(17) > .product-image-wrapper > .single-products > .product-overlay > .overlay-content > .btn');
+    this.productCart2 = this.page.locator('div.productinfo.text-center p:has-text("Sleeves Top and Short - Blue & Pink")');
+    this.addToCartButton2 = this.page.locator('div:nth-child(16) > .product-image-wrapper > .single-products > .product-overlay > .overlay-content > .btn');
+    //filters
+    this.categoryWomen = this.page.locator('div.panel-heading h4.panel-title >> text=Women');
+    this.dressCategory = this.page.locator('#Women .panel-body ul li >> text=Dress');
+    this.categoryProductsTable = this.page.locator('div.features_items p');
+    this.kookieKidsCategory = this.page.locator('a', { hasText: 'Kookie Kids' });
+    this.kookieKidsProductsTable = this.page.locator('div.features_items .productinfo p');
   }
-
+  
   async orderProducts() {
-
-   const productContainer = this.productA.locator('xpath=ancestor::div[contains(@class, "single-products")]');
-   await productContainer.hover();
-   const addToCartButton = productContainer.locator('.product-overlay .add-to-cart');
-   await expect(addToCartButton).toBeVisible({ timeout: 5000 });
-   await addToCartButton.click();
-
+    
+    console.log("Product located: ", await this.productCart.isVisible());
+    await this.productCart.click();
+    await this.page.pause(); 
+    await this.addToCartButton.click();
   }
-
-  get orderConfirmation() {
-    return this.page.getByText('Your product has been added to cart. View Cart');
-  }
-
-  async continueShopping() {
-    await this.continueShoppingButton.click()
-  }
-
-  get emailPassIncorrect() {
-  
-    return this.page.getByText('Your email or password is');
-  }
-
   async orderProducts2() {
-   const productContainer = this.productB.locator('xpath=ancestor::div[contains(@class, "single-products")]');
-   await productContainer.hover();
-   const addToCartButton = productContainer.locator('.product-overlay .add-to-cart');
-   await expect(addToCartButton).toBeVisible({ timeout: 5000 });
-   await addToCartButton.click();
-
+ 
+    console.log("Product2 located: ", await this.productCart2.isVisible());
+    await this.productCart2.click();
+    await this.addToCartButton2.click();
   }
-
-  async goToCart() {
-    await this.viewCardButton.click();
-  }
-
   
+  get orderConfirmation() {
+  return this.page.getByText('Your product has been added to cart. View Cart');
+  }
+  async continueShopping() {
+  await this.continueShoppingButton.click()
   }
 
+  async filterWomenCategory() {
+  await this.categoryWomen.click();
+  await this.dressCategory.waitFor();
+  await this.dressCategory.click();
+  await expect(this.categoryProductsTable).toContainText([
+    data.products.product3, data.products.product4, data.products.product5]);
+  }
+
+  async filterKookieKidsCategory() {
+    await this.kookieKidsCategory.waitFor();
+    await this.kookieKidsCategory.click();
+    await expect(this.kookieKidsProductsTable).toContainText([
+      data.products.product6, data.products.product1, data.products.product8]);
+    }
+   
+}

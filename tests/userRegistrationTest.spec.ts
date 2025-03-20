@@ -10,7 +10,7 @@ test('Register new user positive path', async ({ page }) => {
 
   const fakeName = faker.person.firstName();
   const fakeEmail = faker.internet.email();
-  const fakePassword = faker.string.alphanumeric(8);  // For example, a random password of 8 characters
+  const fakePassword = faker.string.alphanumeric(8); 
   const fakeState = faker.location.state();
   const fakeCity = faker.location.city();
   const fakeZipcode = faker.location.zipCode();
